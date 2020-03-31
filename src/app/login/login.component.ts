@@ -10,6 +10,7 @@ import { UserService } from '../user.service';
 export class LoginComponent implements OnInit {
   isLogged: boolean;
   users: any;
+  errorUser = '';
 
   constructor(
     private authService: AuthService, private userService: UserService
@@ -44,15 +45,33 @@ export class LoginComponent implements OnInit {
   }
 
   getUsers() {
-    this.userService.getUsers()
-    .subscribe(response => {
+    this.userService.getUsers().subscribe(response => {
       console.log('authenticate ', response);
       this.users = response.body;
+      this.errorUser = '';
+    }, error => {
+      this.errorUser = error;
     });
 
   }
   newUser() {
+    const user = {
+      username: "repuestock",
+      email: "repuestock@correo.com",
+      password: "123456",
+      password2: "123456",
+      firstName: "repuestock",
+      lastName: "repuestock",
+      cellphone: "978745454"
+    };
+    this.users = [];
 
+    this.userService.newUser(user).subscribe(response => {
+      console.log('authenticate ', response);
+      this.errorUser = '';
+    }, error => {
+      this.errorUser = error;
+    });
   }
   
 }

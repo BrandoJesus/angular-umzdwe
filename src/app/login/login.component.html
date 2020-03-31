@@ -18,7 +18,9 @@
     <div style="margin-bottom: 10px;">USER SERVICE</div>
     <button (click)="getUsers()">GET USERS</button>
     <button (click)="newUser()">NEW USERS</button>
-
+    <div style="margin-top: 10px; color: red;" *ngIf="errorUser">
+      {{ errorUser | json }}
+    </div>
   </div>
   <div>
     <ul *ngFor="let u of users">
