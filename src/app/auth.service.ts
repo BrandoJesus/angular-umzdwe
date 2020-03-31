@@ -2,19 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 
+import { environment } from '../environment';
+import * as decode from 'jwt-decode';
+
 const credentialsKey = 'credentials';
 
 @Injectable()
 export class AuthService {
 
   // RUTA API
-  baseUrl = 'https://rstk-back.atl.jelastic.vps-host.net/';
+  baseUrl = environment.baseUrl;
   
   //VARIABLES
   authenticationState = new BehaviorSubject(null);
   private _credentials: Credentials | null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.checkAuth();
+  }
 
   authenticate(context: LoginContext) : Observable<any> {
     return this.http.post(`${this.baseUrl}/auth/authenticate`, context);
@@ -23,6 +28,10 @@ export class AuthService {
   logout(): Observable<boolean> {
     this.setCredentials();
     return of(true);
+  }
+
+  isAuthenticated() {
+    return !!this.credentials;
   }
 
   checkAuth() {
@@ -36,26 +45,13 @@ export class AuthService {
     }
   }
 
-  getUsers() : Observable<any> {
-    const savedCredentials = localStorage.getItem('credentials');
-    if (savedCredentials) {
-      const _credentials = JSON.parse(savedCredentials);
-      console.log(`Authorization: Bearer ${_credentials.token}`);
-
-      const options: any = {
-        headers : {
-          "Content-Type": 'application/json',
-          "Authorization": `Bearer ${_credentials.token}`
-        }
-      };
-
-      return this.http.get(`${this.baseUrl}/v1/contacts/users`,options);
-    }
-
-  }
-
   get credentials(): Credentials | null {
     return this._credentials;
+  }
+
+  get username() {
+    const token = this.credentials.token;
+    return decode(token)['sub'];
   }
 
   setCredentials(credentials?: Credentials) {

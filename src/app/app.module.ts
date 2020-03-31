@@ -9,11 +9,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 
 import { AuthService } from './auth.service';
+import { UserService } from './user.service';
 
 @NgModule({
   imports:      [ BrowserModule, FormsModule, HttpClientModule ],
   declarations: [ AppComponent, HelloComponent, LoginComponent ],
   bootstrap:    [ AppComponent ],
-  providers:    [AuthService]
+  providers:    [AuthService, UserService]
 })
 export class AppModule { }

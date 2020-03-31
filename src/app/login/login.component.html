@@ -1,3 +1,28 @@
-<button (click)="authenticate()">INICIAR SESION</button>
+<div  style="margin: 10px; color: blue;" *ngIf="isLogged">
+  ESTA LOGEADO
+</div>
+<div  style="margin: 10px; color: red;" *ngIf="!isLogged">
+  NO ESTA LOGEADO
+</div>
 
-<button (click)="getUsers()">GET USERS</button>
+<div style="margin: 10px;">
+  <div style="margin-bottom: 10px;">AUTH SERVICE</div>
+  <button (click)="authenticate()" *ngIf="!isLogged">
+    INICIAR SESION</button>
+  <button (click)="logout()" *ngIf="isLogged">
+    CERRAR SESION</button>
+</div>
+
+<div *ngIf="isLogged">
+  <div style="margin: 10px;">
+    <div style="margin-bottom: 10px;">USER SERVICE</div>
+    <button (click)="getUsers()">GET USERS</button>
+    <button (click)="newUser()">NEW USERS</button>
+
+  </div>
+  <div>
+    <ul *ngFor="let u of users">
+      <li>{{ u.username }}</li>
+    </ul>
+  </div>
+</div>

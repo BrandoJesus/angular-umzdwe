@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -7,30 +8,51 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  isLogged: boolean;
+  users: any;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService, private userService: UserService
+  ) { }
 
   ngOnInit() {
+    this.isLogged = this.authService.isAuthenticated();
   }
 
   authenticate() {
-    const body = {
+    const user = {
       username: "admin",
       password: "admin"
     };
 
-    this.authService.authenticate(body)
-    .subscribe(response => {
-      console.log('authenticate ', response);
-    localStorage.setItem('credentials', response);
+    this.authService.authenticate(user)
+    .subscribe(credentials => {
+      console.log('authenticate ', credentials);
+      const data = {
+        username: user.username,
+        token: credentials.id_token
+      };
+      this.authService.setCredentials(data);
+      this.isLogged = this.authService.isAuthenticated();
     });
+  }
+
+  logout() {
+    this.authService.logout()
+    .subscribe(response => 
+    this.isLogged = this.authService.isAuthenticated());
   }
 
   getUsers() {
-    this.authService.getUsers()
+    this.userService.getUsers()
     .subscribe(response => {
       console.log('authenticate ', response);
+      this.users = response.body;
     });
 
   }
+  newUser() {
+
+  }
+  
 }
