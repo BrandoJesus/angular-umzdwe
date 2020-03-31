@@ -17,9 +17,41 @@
   <div style="margin: 10px;">
     <div style="margin-bottom: 10px;">USER SERVICE</div>
     <button (click)="getUsers()">GET USERS</button>
-    <button (click)="newUser()">NEW USERS</button>
+
+    <div style="margin: 10px;">
+      <div>
+      Nombre:  <input type="text" [(ngModel)]="user.username">
+      </div>
+      <div>
+      Email:  <input type="text" [(ngModel)]="user.email">
+      </div>
+      <div>
+      password:  <input type="text" [(ngModel)]="user.password">
+      </div>
+      <div>
+      password2:  <input type="text" [(ngModel)]="user.password2">
+      </div>
+      <div>
+      password:  <input type="text" [(ngModel)]="user.password">
+      </div>
+      <div>
+      firstName:  <input type="text" [(ngModel)]="user.firstName">
+      </div>
+      <div>
+      lastName:  <input type="text" [(ngModel)]="user.lastName">
+      </div>
+      <div>
+      cellphone:  <input type="text" [(ngModel)]="user.cellphone">
+      </div>
+    </div>
+    <button (click)="newUser()">NEW USER</button>
+    <button (click)="updateUser()">UPDATE USER</button>
+    <button (click)="deleteUser()">DELETE USER</button>
     <div style="margin-top: 10px; color: red;" *ngIf="errorUser">
       {{ errorUser | json }}
+    </div>
+    <div style="margin-top: 10px;" *ngIf="userjson">
+      {{ userjson | json }}
     </div>
   </div>
   <div>

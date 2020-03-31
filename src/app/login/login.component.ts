@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { UserService } from '../user.service';
+import { UserService, UserModel } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +11,8 @@ export class LoginComponent implements OnInit {
   isLogged: boolean;
   users: any;
   errorUser = '';
+  user: any = {};
+  userjson: any;
 
   constructor(
     private authService: AuthService, private userService: UserService
@@ -18,6 +20,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.isLogged = this.authService.isAuthenticated();
+    this.user = {
+      username: "repuestock",
+      email: "repuestock@correo.com",
+      password: "123456",
+      password2: "123456",
+      firstName: "repuestock",
+      lastName: "repuestock",
+      cellphone: "978745454"
+    };
   }
 
   authenticate() {
@@ -54,24 +65,46 @@ export class LoginComponent implements OnInit {
     });
 
   }
+
   newUser() {
-    const user = {
-      username: "repuestock",
-      email: "repuestock@correo.com",
-      password: "123456",
-      password2: "123456",
-      firstName: "repuestock",
-      lastName: "repuestock",
-      cellphone: "978745454"
-    };
+    const user: any = this.user;
     this.users = [];
 
     this.userService.newUser(user).subscribe(response => {
-      console.log('authenticate ', response);
+      console.log('newUser ', response);
       this.errorUser = '';
+      this.userjson = response.body;
     }, error => {
       this.errorUser = error;
+      this.userjson = '';
+    });
+  }
+
+  updateUser() {
+    const user: any = this.user;
+    this.users = [];
+
+    this.userService.updateUser(user, user.username).subscribe(response => {
+      console.log('updateUser ', response);
+      this.errorUser = '';
+      this.userjson = response.body;
+    }, error => {
+      this.errorUser = error;
+      this.userjson = '';
     });
   }
   
+  deleteUser() {
+    const user: any = this.user;
+    this.users = [];
+
+    this.userService.deleteUser(user).subscribe(response => {
+      console.log('deleteUser ', response);
+      this.errorUser = '';
+      this.userjson = 'usuario eliminado';
+    }, error => {
+      this.errorUser = error;
+      this.userjson = '';
+    });
+  }
 }
